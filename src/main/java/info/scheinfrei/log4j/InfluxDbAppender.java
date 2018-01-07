@@ -1,20 +1,20 @@
 package info.scheinfrei.log4j;
 
-import java.net.InetAddress;
-import java.util.concurrent.TimeUnit;
-
 import org.apache.log4j.AppenderSkeleton;
 import org.apache.log4j.helpers.LogLog;
 import org.apache.log4j.spi.LocationInfo;
 import org.apache.log4j.spi.LoggingEvent;
-
 import org.influxdb.InfluxDB;
 import org.influxdb.InfluxDB.ConsistencyLevel;
 import org.influxdb.InfluxDBFactory;
 import org.influxdb.dto.Point;
 import org.influxdb.dto.Pong;
 
-import com.google.common.base.Joiner;
+import java.net.InetAddress;
+import java.util.StringJoiner;
+import java.util.concurrent.TimeUnit;
+
+//import com.google.common.base.Joiner;
 
 /**
  * Main class that uses InfluxDb to store log entries into.
@@ -53,9 +53,12 @@ public class InfluxDbAppender extends AppenderSkeleton
     public static final String APP_START_TIME = "app_start_time";
     public static final String THREAD_NAME = "thread_name";
     public static final String THROWABLE_STR = "throwable_str_rep";
-    public static final String TIMESTAMP = "log_timestamp";
 
-    // connection state
+
+
+
+
+	// connection state
     private InfluxDB influxDB;
     private Pong connection;
 
@@ -115,17 +118,18 @@ public class InfluxDbAppender extends AppenderSkeleton
             .tag(APP_NAME, appName)
             .tag(LOGGER_NAME, event.getLoggerName())
             .tag(LEVEL, event.getLevel().toString())
+
                 
-            .field(CLASS_NAME, locInfo == null ? "" : locInfo.getClassName())
-            .field(FILE_NAME, locInfo == null ? "" : locInfo.getFileName())
-            .field(LINE_NUMBER, locInfo == null ? "" : locInfo.getLineNumber())
-            .field(METHOD_NAME, locInfo == null ? "" : locInfo.getMethodName())
+            .addField(CLASS_NAME, locInfo == null ? "" : locInfo.getClassName())
+            .addField(FILE_NAME, locInfo == null ? "" : locInfo.getFileName())
+            .addField(LINE_NUMBER, locInfo == null ? "" : locInfo.getLineNumber())
+            .addField(METHOD_NAME, locInfo == null ? "" : locInfo.getMethodName())
             
-            .field(MESSAGE, event.getRenderedMessage())
-            .field(NDC, event.getNDC() == null ? "" : event.getNDC())
-            .field(APP_START_TIME, new Long(LoggingEvent.getStartTime()))
-            .field(THREAD_NAME, event.getThreadName())
-            .field(THROWABLE_STR, throwableStrs == null ? "" : Joiner.on(", ").join(throwableStrs))
+            .addField(MESSAGE, event.getRenderedMessage())
+            .addField(NDC, event.getNDC() == null ? "" : event.getNDC())
+            .addField(APP_START_TIME, new Long(LoggingEvent.getStartTime()).floatValue())
+            .addField(THREAD_NAME, event.getThreadName())
+            .addField(THROWABLE_STR, throwableStrs == null ? "" : String.join(", ",throwableStrs))
             .build();
 		
 		
@@ -253,7 +257,7 @@ public class InfluxDbAppender extends AppenderSkeleton
 		}
         catch (IllegalArgumentException e) {
 			throw new IllegalArgumentException("Consistency level " + consistencyLevelWrite
-					+ " wasn't found. Available levels: " + Joiner.on(", ").join(ConsistencyLevel.values()));
+					+ " wasn't found. Available levels: " + String.join(", ",ConsistencyLevel.values().toString()));
 		}
 	}
 

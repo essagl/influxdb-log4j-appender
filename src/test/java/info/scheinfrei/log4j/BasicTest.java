@@ -8,8 +8,6 @@ import org.apache.log4j.spi.LoggingEvent;
 import org.junit.Before;
 import org.junit.Test;
 
-import info.scheinfrei.log4j.InfluxDbAppender;
-
 /**
  * Basic test for setting appender properties.
  */
