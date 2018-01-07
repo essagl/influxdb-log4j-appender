@@ -11,7 +11,7 @@ As there was a lack of an proper Implementation of an InfluxDB Appender I tried 
 ## InfluxDb support
 
 This Appender uses the [influx-java 2.8 driver](https://github.com/influxdb/influxdb-java), supporting only Versions >0.9 of InfluxDb
-
+mvn install
 ## Usage with log4j.properties
 
 How to add this appender to log4j.properties:
@@ -63,8 +63,15 @@ How to add this appender to log4j.xml:
 ```
 
 ## How to build:
-
-  `mvn install -DskipTests=true`
+  [Install docker](https://docs.docker.com/engine/installation/)
+    
+  Then run influxDb with 
+    
+  `docker run -p 8086:8086 -p 8089:8089/udp --name influxdb -v influxdb:/var/lib/influxdb influxdb`
+  
+  When database is up and running call
+     
+  `mvn install`
 
 ## Future plans
 
