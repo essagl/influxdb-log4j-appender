@@ -10,7 +10,7 @@ As there was a lack of an proper Implementation of an InfluxDB Appender I tried 
 
 ## InfluxDb support
 
-This Appender uses the [influx-java 2.4 driver](https://github.com/influxdb/influxdb-java), supporting only Versions >0.9 of InfluxDb
+This Appender uses the [influx-java 2.8 driver](https://github.com/influxdb/influxdb-java), supporting only Versions >0.9 of InfluxDb
 
 ## Usage with log4j.properties
 
